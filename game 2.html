@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Kuis Matematika: Bangun Ruang Tabung</title>
+    <style>
+        .container {max-width: 1000px; margin: 0 auto; padding: 20px;}
+    .card {background: rgba(163, 130, 130, 0.05); border: 1px solid rgba(214, 134, 134, 0.1); border-radius: 14px; padding: 20px; margin-bottom: 20px; transition: transform 0.3s ease, box-shadow 0.3s ease;}
+        body { font-family: Arial, sans-serif; margin: 20px; text-align: center; }
+        .question { margin: 20px; }
+        img { max-width: 200px; height: auto; margin-bottom: 10px; }
+        button { padding: 10px; background-color: #4CAF50; color: rgb(7, 34, 187); border: none; cursor: pointer; margin: 5px; }
+        button:hover { background-color: #45a049; }
+        #timer { font-size: 24px; color: red; }
+        #score, #lives { font-weight: bold; }
+        #feedback { margin-top: 20px; font-size: 18px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <h1>Game Kuis Matematika: Bangun Ruang Tabung</h1>
+    <p>Jawab cepat untuk dapat poin lebih banyak! Timer 30 detik per soal. Nyawa: <span id="lives">3</span> | Skor: <span id="score">0</span></p>
+    <div id="timer">30</div>
+    
+    <div id="question1" class="question">
+        <img src="vol 1.jpg" alt="vol 1.jpg">
+        <p>1. Rumus volume tabung adalah...</p>
+        <button onclick="answer(1, 'a')">πr²t</button>
+        <button onclick="answer(1, 'b')">2πr(t + r)</button>
+        <button onclick="answer(1, 'c')">πr²</button>
+    </div>
+    
+    <div id="question2" class="question hidden">
+        <img src="luas t.jpg" alt="luas t.jpg">
+        <p>2. Luas permukaan tabung adalah...</p>
+        <button onclick="answer(2, 'a')">2πr</button>
+        <button onclick="answer(2, 'b')">2πr(t + r)</button>
+        <button onclick="answer(2, 'c')">πr²t</button>
+    </div>
+    
+    <div id="question3" class="question hidden">
+        <img src="vol.png" alt="vol.png">
+        <p>3. Jika jari-jari 5 cm dan tinggi 10 cm, volume adalah...</p>
+        <button onclick="answer(3, 'a')">250π cm³</button>
+        <button onclick="answer(3, 'b')">150π cm³</button>
+        <button onclick="answer(3, 'c')">100π cm³</button>
+    </div>
+    
+    <div id="question4" class="question hidden">
+        <img src="jaring.jpg" alt="jaring.jpg">
+        <p>4. Tabung memiliki dua lingkaran sebagai alas dan...</p>
+        <button onclick="answer(4, 'a')">satu persegi panjang sebagai selimut</button>
+        <button onclick="answer(4, 'b')">satu lingkaran sebagai selimut</button>
+        <button onclick="answer(4, 'c')">dua persegi panjang sebagai selimut</button>
+    </div>
+    
+    <div id="question5" class="question hidden">
+
+        <p>5. Jika luas alas 50π cm² dan tinggi 8 cm, volume adalah...</p>
+        <button onclick="answer(5, 'a')">400π cm³</button>
+        <button onclick="answer(5, 'b')">200π cm³</button>
+        <button onclick="answer(5, 'c')">100π cm³</button>
+    </div>
+    
+    <div id="question6" class="question hidden">
+        <img src="tabung 1.jpg" alt="tabung 1.jpg">
+        <p>6. Apa yang dimaksud dengan tabung?</p>
+        <button onclick="answer(6, 'a')">Bangun ruang dengan dua alas lingkaran dan selimut persegi panjang</button>
+        <button onclick="answer(6, 'b')">Bangun ruang dengan satu alas segitiga</button>
+        <button onclick="answer(6, 'c')">Bangun ruang dengan alas persegi</button>
+    </div>
+    
+    <div id="question7" class="question hidden">
+      <img src="selim.jpg" alt="selim.jpg">
+        <p>7. Bagian yang melingkari tabung disebut...</p>
+        <button onclick="answer(7, 'a')">Selimut</button>
+        <button onclick="answer(7, 'b')">Alas</button>
+        <button onclick="answer(7, 'c')">Tinggi</button>
+    </div>
+    
+    <div id="question8" class="question hidden">
+     
+        <p>8. Jika jari-jari tabung 3 cm dan tinggi 6 cm, volume adalah...</p>
+        <button onclick="answer(8, 'a')">54π cm³</button>
+        <button onclick="answer(8, 'b')">36π cm³</button>
+        <button onclick="answer(8, 'c')">18π cm³</button>
+    </div>
+    
+    <div id="question9" class="question hidden">
+        <img src="luas 1.webp" alt="luas 1.webp">
+        <p>9. Luas permukaan tabung terdiri dari...</p>
+        <button onclick="answer(9, 'a')">Luas dua alas dan luas selimut</button>
+        <button onclick="answer(9, 'b')">Luas satu alas saja</button>
+        <button onclick="answer(9, 'c')">Luas selimut saja</button>
+    </div>
+    
+    <div id="question10" class="question hidden">
+        
+        <p>10. Contoh benda berbentuk tabung adalah...</p>
+        <button onclick="answer(10, 'a')">Kaleng minuman</button>
+        <button onclick="answer(10, 'b')">Bola sepak</button>
+        <button onclick="answer(10, 'c')">Kotak pensil</button>
+    </div>
+    
+    <div id="feedback"></div>
+    <button id="restart" class="hidden" onclick="restartGame()">Main Lagi</button>
+    
+    <script>
+        let currentQuestion = 1;
+        let score = 0;
+        let lives = 3;
+        let timer = 30;
+        let interval;
+        const answers = {1: 'a', 2: 'b', 3: 'a', 4: 'a', 5: 'a', 6: 'a', 7: 'a', 8: 'a', 9: 'a', 10: 'a'};
+        
+        function startTimer() {
+            interval = setInterval(() => {
+                timer--;
+                document.getElementById('timer').innerText = timer;
+                if (timer <= 0) {
+                    clearInterval(interval);
+                    wrongAnswer();
+                }
+            }, 1000);
+        }
+        
+        function answer(q, choice) {
+            clearInterval(interval);
+            if (choice === answers[q]) {
+                let points = timer * 10; // Poin berdasarkan waktu tersisa
+                score += points;
+                document.getElementById('score').innerText = score;
+                document.getElementById('feedback').innerText = `Benar! +${points} poin.`;
+            } else {
+                wrongAnswer();
+                return;
+            }
+            nextQuestion();
+        }
+        
+        function wrongAnswer() {
+            lives--;
+            document.getElementById('lives').innerText = lives;
+            document.getElementById('feedback').innerText = 'Salah! Nyawa berkurang.';
+            if (lives <= 0) {
+                endGame();
+                return;
+            }
+            nextQuestion();
+        }
+        
+        function nextQuestion() {
+            document.getElementById(`question${currentQuestion}`).classList.add('hidden');
+            currentQuestion++;
+            if (currentQuestion <= 10) {
+                document.getElementById(`question${currentQuestion}`).classList.remove('hidden');
+                timer = 30;
+                document.getElementById('timer').innerText = timer;
+                startTimer();
+            } else {
+                endGame();
+            }
+        }
+        
+        function endGame() {
+            document.getElementById('feedback').innerText = `Game Over! Skor Akhir: ${score}`;
+            document.getElementById('restart').classList.remove('hidden');
+        }
+        
+        function restartGame() {
+            currentQuestion = 1;
+            score = 0;
+            lives = 3;
+            timer = 30;
+            document.getElementById('score').innerText = score;
+            document.getElementById('lives').innerText = lives;
+            document.getElementById('timer').innerText = timer;
+            document.getElementById('feedback').innerText = '';
+            document.getElementById('restart').classList.add('hidden');
+            for (let i = 1; i <= 10; i++) {
+                document.getElementById(`question${i}`).classList.add('hidden');
+            }
+            document.getElementById('question1').classList.remove('hidden');
+            startTimer();
+        }
+        
+        startTimer(); // Mulai game
+    </script>
+</body>
+</html>
